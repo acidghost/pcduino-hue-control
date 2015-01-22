@@ -1,6 +1,7 @@
 import time
 from discovery import Discovery
 from lib.qhue.qhue import Bridge, QhueException
+import gpio
 
 bridges = Discovery.find()
 uname = None
