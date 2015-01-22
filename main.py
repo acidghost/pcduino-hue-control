@@ -1,13 +1,14 @@
 import time
 from discovery import Discovery
 from lib.qhue.qhue import Bridge, QhueException
-import gpio
+from lib.pcduino import gpio
 
 bridges = Discovery.find()
 uname = None
 
 def authBridge():
 	global uname
+	b = Bridge(bridges[0])
 	bridgePressed = False
 	while not bridgePressed:
 		try:
