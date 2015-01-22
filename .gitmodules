@@ -1,0 +1,3 @@
+[submodule "lib/qhue"]
+	path = lib/qhue
+	url = https://github.com/acidghost/qhue.git
