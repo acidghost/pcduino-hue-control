@@ -4,7 +4,10 @@ from lib.qhue.qhue import Bridge, QhueException
 from lib.pcduino import gpio
 
 bridges = Discovery.find()
+b = None
 uname = None
+
+btnPin = 'gpio8'
 
 def authBridge():
 	global uname
@@ -33,10 +36,33 @@ def searchKey():
 		print "File not found; authenticate now."
 		authBridge()
 
-searchKey()
-b = Bridge(bridges[0], uname)
+def toggleLight():
+	isOn = b.lights[1]()['state']['on']
+	b.lights[1].state(on=!isOn)
 
-b.lights[1].state(on=True, bri=255)
-time.sleep(1)
-b.lights[1].state(on=False)
-print "End here " + uname
+def setup():
+	global b
+	searchKey()
+	b = Bridge(bridges[0], uname)
+	'''
+	b.lights[1].state(on=True, bri=255)
+	time.sleep(1)
+	b.lights[1].state(on=False)
+	print "End here " + uname
+	toggleLight()
+	'''
+	gpio.pin_mode(btnPin, gpio.INPUT)
+
+def loop():
+	read = gpio.digital_read(btnPin)
+	if read:
+		toggleLight()
+		print "Light 1 toggled"
+	time.sleep(.5)
+
+def main():
+	setup()
+	while True:
+		loop()
+
+main()
